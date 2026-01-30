@@ -1,0 +1,30 @@
+[project]
+name = "junior-test"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "gregsyu",email = "greg3@tutamail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi (>=0.128.0,<0.129.0)",
+    "sqlalchemy (>=2.0.46,<3.0.0)",
+    "python-jose[cryptography] (>=3.5.0,<4.0.0)",
+    "pydantic-settings (>=2.12.0,<3.0.0)",
+    "pymysql (>=1.1.2,<2.0.0)",
+    "passlib (>=1.7.4,<2.0.0)",
+    "argon2-cffi (>=25.1.0,<26.0.0)",
+]
+
+[tool.poetry]
+packages = [{include = "junior_test", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "alembic (>=1.18.2,<2.0.0)"
+]
