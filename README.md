@@ -32,7 +32,7 @@ Desenvolvida com **FastAPI**, **SQLAlchemy 2.x**, **MySQL** e autenticação via
 1. Clone o repositório
 
 ```bash
-git clone <url-do-seu-repo> <dir>
+git clone https://github.com/gregsyu/task-manager.git <dir>
 cd <dir>
 ```
 
