@@ -17,8 +17,6 @@ class Settings(BaseSettings):
     DB_POOL_RECYCLE: int = 3600
 
     DATABASE_URL: str = os.getenv("DATABASE_URL")
-    # Alternativa async (se usar SQLAlchemy async):
-    # DATABASE_URL: str = "mysql+aiomysql://user:password@localhost:3306/task_manager"
 
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     JWT_ALGORITHM: str = "HS256"
