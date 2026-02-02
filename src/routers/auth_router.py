@@ -28,7 +28,7 @@ router = APIRouter(
 def register_user(user_in: UserCreate, db: Annotated[Session, Depends(get_db)]):
     existing_user = (
         db.query(User)
-        .filter((User.email == user_in.email) | (User.username == user_in.username))
+        .filter((User.username == user_in.username) | (User.email == user_in.email))
         .first()
     )
 
