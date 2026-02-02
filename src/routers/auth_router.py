@@ -22,7 +22,7 @@ router = APIRouter(
     status_code=status.HTTP_201_CREATED,
     responses={
         201: {"description": SuccessMsg.USER_REGISTERED},
-        400: {"description": "User already exists or invalid data"},
+        400: {"description": ErrorMsg.USER_ALREADY_EXISTS},
     },
 )
 def register_user(user_in: UserCreate, db: Annotated[Session, Depends(get_db)]):
