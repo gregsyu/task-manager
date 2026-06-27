@@ -27,6 +27,9 @@ Desenvolvida com **FastAPI**, **SQLAlchemy 2.x**, **MySQL** e autenticação via
 - Poetry instalado (`pip install poetry`)
 - MySQL rodando (local)
 
+> [!HINT]
+> Também tem `docker compose`.
+
 ## Instalação e execução
 
 1. Clone o repositório
@@ -70,6 +73,32 @@ Acesse:
 
 * Swagger: http://localhost:8000/docs
 * ReDoc: http://localhost:8000/redoc
+
+## Execução com Docker Compose (alternativa)
+
+Você também pode rodar a aplicação usando Docker Compose, que já inclui o backend e o banco de dados MySQL:
+
+1. Certifique-se de ter o Docker e Docker Compose instalados
+
+2. Rode os containers:
+```bash
+docker compose build                                        # Construir a imagem
+docker compose up -d db                                     # Iniciar o banco de dados
+docker compose run --rm app poetry run alembic upgrade head # Executar migrações do banco de dados
+docker compose up -d app                                    # Iniciar a aplicação
+```
+
+3. Acesse a API em http://localhost:8000
+   - Swagger: http://localhost:8000/docs
+   - ReDoc: http://localhost:8000/redoc
+   - MySQL estará disponível na porta `3306`
+
+4. Para parar os containers:
+```bash
+docker compose down -v
+```
+
+> **Observação**: Em ambiente de desenvolvimento, o código-fonte é montado em volume (`./src:/app/src`), então mudanças locais são refletidas imediatamente no container.
 
 ## Rotas principais
 
