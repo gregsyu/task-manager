@@ -88,10 +88,8 @@ docker compose build
 # Iniciar o banco de dados
 docker compose up -d db
 
-# Gerar `alembic.ini` e executar migrações do banco de dados
-docker compose run --rm app \
-  sh -c "poetry run alembic init alembic
-  && poetry run alembic upgrade head"
+# Executar migrações do banco de dados
+docker compose run --rm app poetry run alembic upgrade head
 
 # Iniciar a aplicação
 docker compose up -d app
