@@ -18,7 +18,6 @@ RUN poetry config virtualenvs.create false && \
 COPY src ./src
 
 COPY alembic ./alembic
-COPY alembic.ini .
 
 EXPOSE 8000
 
