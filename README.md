@@ -27,7 +27,7 @@ Desenvolvida com **FastAPI**, **SQLAlchemy 2.x**, **MySQL** e autenticação via
 - Poetry instalado (`pip install poetry`)
 - MySQL rodando (local)
 
-> [!HINT]
+> [!TIP]
 > Também tem `docker compose`.
 
 ## Instalação e execução
@@ -107,7 +107,8 @@ docker compose up -d app
 docker compose down -v
 ```
 
-> **Observação**: Em ambiente de desenvolvimento, o código-fonte é montado em volume (`./src:/app/src`), então mudanças locais são refletidas imediatamente no container.
+> [!NOTE]
+> Em ambiente de desenvolvimento, o código-fonte é montado em volume (`./src:/app/src`), então mudanças locais são refletidas imediatamente no container.
 
 ## Rotas principais
 
