@@ -82,10 +82,19 @@ Você também pode rodar a aplicação usando Docker Compose, que já inclui o b
 
 2. Rode os containers:
 ```bash
-docker compose build                                        # Construir a imagem
-docker compose up -d db                                     # Iniciar o banco de dados
-docker compose run --rm app poetry run alembic upgrade head # Executar migrações do banco de dados
-docker compose up -d app                                    # Iniciar a aplicação
+# Construir a imagem
+docker compose build
+
+# Iniciar o banco de dados
+docker compose up -d db
+
+# Gerar `alembic.ini` e executar migrações do banco de dados
+docker compose run --rm app \
+  sh -c "poetry run alembic init alembic
+  && poetry run alembic upgrade head"
+
+# Iniciar a aplicação
+docker compose up -d app
 ```
 
 3. Acesse a API em http://localhost:8000
