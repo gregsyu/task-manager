@@ -21,8 +21,8 @@ class TaskPriority(str, enum.Enum):
 class BaseTask(BaseModel):
     title: str = Field(..., min_length=1, max_length=200, description="Title task")
     description: Optional[str] = Field(None, max_length=2000)
-    status: TaskStatus = Field("pending")
-    priority: Optional[TaskPriority] = Field("medium")
+    status: TaskStatus = Field(TaskStatus.PENDING)
+    priority: Optional[TaskPriority] = Field(TaskPriority.MEDIUM)
     due_date: Optional[datetime] = None
 
 
