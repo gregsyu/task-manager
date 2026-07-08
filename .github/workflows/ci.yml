@@ -15,23 +15,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.11"
-        cache: "poetry"
 
     - name: Install Poetry
-      run: curl -sSL https://install.python-poetry.org | python3 -
+      uses: snok/install-poetry@v1
+      with:
+        version: latest
+        virtualenvs-create: false
 
-    
-    - name: Add Poetry to PATH
-      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-
-    - name: Configure Poetry
-      run: poetry config virtualenvs.create false
-
+    - name: Cache Poetry packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pypoetry
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
 
     - name: Install dependencies
       run: poetry install --no-interaction --no-ansi
