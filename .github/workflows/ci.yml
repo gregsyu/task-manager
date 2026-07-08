@@ -44,4 +44,7 @@ jobs:
         poetry run flake8 . --count --statistics
 
     - name: Test with pytest
+      env:
+        DATABASE_URL: sqlite:///test.db
+        SECRET_KEY: test-secret
       run: poetry run pytest --disable-warnings
