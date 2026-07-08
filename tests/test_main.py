@@ -2,10 +2,8 @@ from fastapi.testclient import TestClient
 from src.settings import settings
 from src.main import app
 
-client = TestClient(app)
 
-
-def test_home_healthcheck():
+def test_home_healthcheck(client):
     response = client.get("/")
     data = response.json()
 
