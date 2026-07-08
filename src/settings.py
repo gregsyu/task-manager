@@ -11,17 +11,17 @@ class Settings(BaseSettings):
     PROJECT_VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
 
-    DB_POOL_SIZE: int = 20
-    DB_MAX_OVERFLOW: int = 10
-    DB_POOL_TIMEOUT: int = 30
-    DB_POOL_RECYCLE: int = 3600
+    DB_POOL_SIZE: int = os.getenv("DB_POOL_SIZE", 20)
+    DB_MAX_OVERFLOW: int = os.getenv("DB_MAX_OVERFLOW", 10)
+    DB_POOL_TIMEOUT: int = os.getenv("DB_POOL_TIMEOUT", 30)
+    DB_POOL_RECYCLE: int = os.getenv("DB_POOL_RECYCLE", 3600)
 
     DATABASE_URL: str = os.getenv("DATABASE_URL")
 
     SECRET_KEY: str = os.getenv("SECRET_KEY")
-    JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    REFRESH_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
+    JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv("REFRESH_TOKEN_EXPIRE_MINUTES", 1440) # 24 hours for default
 
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173", "*"]
 
