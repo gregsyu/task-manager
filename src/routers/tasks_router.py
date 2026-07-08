@@ -38,14 +38,14 @@ def create_task(
     response_model=List[TaskResponse],
     responses={404: {"description": ErrorMsg.TASK_NOT_FOUND}},
 )
-def read_task(
+def read_tasks(
     db: Annotated[Session, Depends(get_db)],
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     status: Optional[TaskStatus] = Query(None),
     current_user: User = Depends(get_current_user),
 ):
-    query = db.query(Task).filter(Task.user_id == current_user.id)
+    query = db.query(Task).filter(Task.owner_id == current_user.id)
 
     if status:
         query = query.filter(Task.status == status)
@@ -69,7 +69,7 @@ def read_by_id_task(db: Annotated[Session, Depends(get_db)], task_id: int, curre
             status_code=status.HTTP_404_NOT_FOUND, detail=ErrorMsg.TASK_NOT_FOUND
         )
 
-    if task.user_id != current_user.id:
+    if task.owner_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=ErrorMsg.TASK_FORBIDDEN,
@@ -79,7 +79,7 @@ def read_by_id_task(db: Annotated[Session, Depends(get_db)], task_id: int, curre
 
 
 @router.patch(
-    "/",
+    "/{task_id}",
     response_model=TaskResponse,
     responses={
         403: {"description": ErrorMsg.TASK_FORBIDDEN},
@@ -97,7 +97,7 @@ def update_task(
             status_code=status.HTTP_404_NOT_FOUND, detail=ErrorMsg.TASK_NOT_FOUND
         )
 
-    if task.user_id != current_user.id:
+    if task.owner_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=ErrorMsg.TASK_FORBIDDEN,
@@ -130,7 +130,7 @@ def delete_by_id_task(
             status_code=status.HTTP_404_NOT_FOUND, detail=ErrorMsg.TASK_NOT_FOUND
         )
 
-    if task.user_id != current_user.id:
+    if task.owner_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=ErrorMsg.TASK_FORBIDDEN,
