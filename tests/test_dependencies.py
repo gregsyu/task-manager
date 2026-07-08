@@ -3,9 +3,8 @@ from unittest.mock import Mock, patch
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.dependencies import get_db, get_current_user
+from src.dependencies import get_current_user
 from src.database import User
-from src.security import verify_access_token
 from jose import JWTError
 
 

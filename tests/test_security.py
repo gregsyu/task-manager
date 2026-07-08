@@ -1,7 +1,6 @@
 import pytest
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from src.settings import settings
 
 from src.security import (
@@ -10,7 +9,6 @@ from src.security import (
     create_access_token,
     verify_access_token,
 )
-from src.settings import settings
 from fastapi import HTTPException, status
 
 
@@ -27,8 +25,8 @@ def test_verify_password():
     password = "testpassword123"
     hashed = get_password_hash(password)
 
-    assert verify_password(password, hashed) == True
-    assert verify_password("wrongpassword", hashed) == False
+    assert verify_password(password, hashed)  # assert it's True
+    assert not verify_password("wrongpassword", hashed)  # assert it's False
 
 
 def test_create_access_token():

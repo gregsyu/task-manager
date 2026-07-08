@@ -2,8 +2,10 @@ from fastapi import APIRouter, Query, status, HTTPException, Depends
 from typing import List, Optional, Annotated
 from ..schemas.tasks import TaskResponse, TaskCreate, TaskUpdate, TaskStatus
 from ..database import Task, User
+
 # from ..dependencies import get_current_user, get_db
 from ..messages import ErrorMsg, SuccessMsg
+
 # from sqlalchemy.orm import Session
 from .. import service
 from sqlalchemy.orm import Session
@@ -61,7 +63,11 @@ def read_tasks(
         404: {"description": ErrorMsg.TASK_NOT_FOUND},
     },
 )
-def read_by_id_task(db: Annotated[Session, Depends(get_db)], task_id: int, current_user: User = Depends(get_current_user)):
+def read_by_id_task(
+    db: Annotated[Session, Depends(get_db)],
+    task_id: int,
+    current_user: User = Depends(get_current_user),
+):
     task = service.get_task_by_id(db, task_id=task_id)
 
     if not task:
@@ -88,7 +94,10 @@ def read_by_id_task(db: Annotated[Session, Depends(get_db)], task_id: int, curre
     },
 )
 def update_task(
-    db: Annotated[Session, Depends(get_db)], task_id: int, task_update: TaskUpdate, current_user: User = Depends(get_current_user)
+    db: Annotated[Session, Depends(get_db)],
+    task_id: int,
+    task_update: TaskUpdate,
+    current_user: User = Depends(get_current_user),
 ):
     task = service.get_task_by_id(db, task_id=task_id)
 

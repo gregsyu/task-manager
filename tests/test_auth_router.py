@@ -1,16 +1,8 @@
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlmodel.pool import StaticPool
-from sqlalchemy.orm import sessionmaker
-
 from .conftest import create_user
 from src.main import app
-from src.database import Base
-from src.dependencies import get_db, get_current_user
-from src.schemas.auth import UserCreate, Token
-from src.security import get_password_hash
-from src.database import User
+from src.dependencies import get_current_user
+from src.schemas.auth import UserCreate
 
 
 @pytest.fixture(scope="function")

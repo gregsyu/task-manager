@@ -9,16 +9,20 @@ from fastapi import Depends
 from .dependencies import get_db
 
 
-def delete_task(db = Annotated[Session, Depends(get_db)], task: Task = Task) -> None:
+def delete_task(db=Annotated[Session, Depends(get_db)], task: Task = Task) -> None:
     db.delete(task)
     db.commit()
 
 
-def get_task_by_id(db: Annotated[Session, Depends(get_db)], task_id: int) -> Optional[Task]:
+def get_task_by_id(
+    db: Annotated[Session, Depends(get_db)], task_id: int
+) -> Optional[Task]:
     return db.query(Task).filter(Task.id == task_id).first()
 
 
-def update_task(db: Annotated[Session, Depends(get_db)], task: Task, task_update: TaskUpdate) -> Task:
+def update_task(
+    db: Annotated[Session, Depends(get_db)], task: Task, task_update: TaskUpdate
+) -> Task:
     update_data = task_update.model_dump(exclude_unset=True)
 
     for key, value in update_data.items():

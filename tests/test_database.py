@@ -1,7 +1,3 @@
-import pytest
-from sqlalchemy import create_engine
-from sqlmodel.pool import StaticPool
-from sqlalchemy.orm import sessionmaker
 from src.database import Base, Task, User
 from src.schemas.tasks import TaskStatus, TaskPriority
 from .conftest import create_user, create_user_and_task

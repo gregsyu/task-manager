@@ -4,7 +4,9 @@ import os
 
 
 class Settings(BaseSettings):
-    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")  # development | staging | production
+    ENVIRONMENT: str = os.getenv(
+        "ENVIRONMENT", "development"
+    )  # development | staging | production
     DEBUG: bool = os.getenv("DEBUG", "true").lower() in ("true", "1", "yes")
 
     PROJECT_NAME: str = "Task Manager API"
@@ -21,7 +23,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
-    REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv("REFRESH_TOKEN_EXPIRE_MINUTES", 1440) # 24 hours for default
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv(
+        "REFRESH_TOKEN_EXPIRE_MINUTES", 1440
+    )  # 24 hours for default
 
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173", "*"]
 

@@ -1,17 +1,7 @@
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlmodel.pool import StaticPool
-from sqlalchemy.orm import sessionmaker
-
-from .conftest import create_user, create_user_and_task
-from src.main import app
-from src.database import Base
-from src.dependencies import get_db
-from src.database import Task, User
-from src.schemas.tasks import TaskCreate, TaskUpdate
+from .conftest import create_user_and_task
+from src.schemas.tasks import TaskUpdate
 from src.service import delete_task, get_task_by_id, update_task
-from src.security import get_password_hash
 
 
 def test_get_task_by_existing_id(db_session):

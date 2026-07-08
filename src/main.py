@@ -7,6 +7,7 @@ app = FastAPI(title="Task Manager API")
 app.include_router(tasks_router.router)
 app.include_router(auth_router.router)
 
+
 @app.get("/")
 def home():
     return {

@@ -60,7 +60,10 @@ def register_user(user_in: UserCreate, db: Annotated[Session, Depends(get_db)]):
         401: {"description": ErrorMsg.INVALID_CREDENTIALS},
     },
 )
-def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Annotated[Session, Depends(get_db)]):
+def login(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: Annotated[Session, Depends(get_db)],
+):
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
