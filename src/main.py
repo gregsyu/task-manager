@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+
+from src.schemas.response import HealthResponse
 from .routers import tasks_router, auth_router
 from .settings import settings
 
@@ -8,7 +10,7 @@ app.include_router(tasks_router.router)
 app.include_router(auth_router.router)
 
 
-@app.get("/")
+@app.get("/", response_model=HealthResponse)
 def home():
     return {
         "message": "Task Manager API is running",

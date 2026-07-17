@@ -81,34 +81,8 @@ def login(
     "/me",
     response_model=UserOut,
 )
-def read_users_me(current_user: User = Depends(get_current_user)):
+def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
     return current_user
-
-
-# @router.put(
-#     "/me/password",
-#     response_model=UserOut,
-#     responses={
-#         200: {"description": "Senha alterada com sucesso"},
-#         400: {"description": "Senha atual incorreta ou nova senha inválida"},
-#     },
-# )
-# def change_password(
-#     password_change: UserPasswordChange, current_user: CurrentUser, db: DB
-# ):
-#     if not verify_password(
-#         password_change.current_password, current_user.hashed_password
-#     ):
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST,
-#             detail=ErrorMsg.INVALID_CURRENT_PASSWORD,
-#         )
-#
-#     current_user.hashed_password = get_password_hash(password_change.new_password)
-#     db.commit()
-#     db.refresh(current_user)
-#
-#     return current_user
 
 
 def authenticate_user(

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict
 from sqlalchemy.orm import Session
 from .database import Task
 from fastapi import HTTPException, status
@@ -9,7 +9,9 @@ from fastapi import Depends
 from .dependencies import get_db
 
 
-def delete_task(db=Annotated[Session, Depends(get_db)], task: Task = Task) -> None:
+def delete_task(db: Annotated[Session, Depends(get_db)], task: Task | None) -> None:
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
     db.delete(task)
     db.commit()
 
@@ -23,7 +25,7 @@ def get_task_by_id(
 def update_task(
     db: Annotated[Session, Depends(get_db)], task: Task, task_update: TaskUpdate
 ) -> Task:
-    update_data = task_update.model_dump(exclude_unset=True)
+    update_data: Dict[str, str] = task_update.model_dump(exclude_unset=True)
 
     for key, value in update_data.items():
         if key == "status" and value not in [s.value for s in TaskStatus]:

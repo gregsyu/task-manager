@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
-from typing import Optional
+from typing import Optional, ClassVar
 
 
 class UserCreate(BaseModel):
@@ -10,20 +10,14 @@ class UserCreate(BaseModel):
 
 
 class UserOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config: ClassVar[ConfigDict] = ConfigDict(from_attributes=True)
 
     id: int
     username: str
     email: Optional[EmailStr]
     full_name: Optional[str]
-    # is_active: bool
 
 
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-
-# class UserPasswordChange(BaseModel):
-#     current_password: str
-#     new_password: str = Field(..., min_length=8)

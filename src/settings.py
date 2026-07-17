@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List
+from pydantic_settings.main import SettingsConfigDict
+from pydantic_settings import BaseSettings
+from typing import List, ClassVar
 import os
 
 
@@ -13,23 +14,24 @@ class Settings(BaseSettings):
     PROJECT_VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
 
-    DB_POOL_SIZE: int = os.getenv("DB_POOL_SIZE", 20)
-    DB_MAX_OVERFLOW: int = os.getenv("DB_MAX_OVERFLOW", 10)
-    DB_POOL_TIMEOUT: int = os.getenv("DB_POOL_TIMEOUT", 30)
-    DB_POOL_RECYCLE: int = os.getenv("DB_POOL_RECYCLE", 3600)
+    DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", 20))
+    DB_MAX_OVERFLOW: int = int(os.getenv("DB_MAX_OVERFLOW", 10))
+    DB_POOL_TIMEOUT: int = int(os.getenv("DB_POOL_TIMEOUT", 30))
+    DB_POOL_RECYCLE: int = int(os.getenv("DB_POOL_RECYCLE", 3600))
 
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    DATABASE_URL: str | None = os.getenv("DATABASE_URL")
 
-    SECRET_KEY: str = os.getenv("SECRET_KEY")
+    SECRET_KEY: str | None = os.getenv("SECRET_KEY")
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
-    REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv(
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = int(os.getenv(
         "REFRESH_TOKEN_EXPIRE_MINUTES", 1440
-    )  # 24 hours for default
+    ))  # 24 hours for default
 
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173", "*"]
 
-    model_config = SettingsConfigDict(
+    # `ClassVar` tells your code tool that a variable belongs to the class itself
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
         env_file=(".env", ".env.local", ".env.development"),
         env_file_encoding="utf-8",
         case_sensitive=False,

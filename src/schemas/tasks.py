@@ -30,7 +30,7 @@ class TaskCreate(BaseTask):
     pass
 
 
-class TaskUpdate(BaseTask):
+class TaskUpdate(BaseModel):
     # All optional fields to partial update
     title: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = None

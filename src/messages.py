@@ -1,4 +1,7 @@
-class ErrorMsg:
+import enum
+
+
+class ErrorMsg(str, enum.Enum):
     TASK_NOT_FOUND = "Task not found"
     TASK_FORBIDDEN = "Access denied - user doesn't own task"
     INVALID_STATUS = "Invalid status value"
@@ -12,7 +15,7 @@ class ErrorMsg:
     UNAUTHORIZED = "Not Authorized"
 
 
-class SuccessMsg:
+class SuccessMsg(str, enum.Enum):
     TASK_CREATED = "Task created successfully"
     TASK_UPDATED = "Task updated successfully"
     TASK_DELETED = "Task deleted successfully"

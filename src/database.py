@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, override
 from sqlalchemy import ForeignKey, Enum
 from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 
 
 class Task(Base):
-    __tablename__ = "tasks"
+    __tablename__: str = "tasks"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
@@ -46,12 +46,13 @@ class Task(Base):
         onupdate=func.now(), nullable=True
     )
 
+    @override
     def __repr__(self) -> str:
         return f"<Task id={self.id} title='{self.title}' status={self.status}>"
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__: str = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
@@ -79,5 +80,6 @@ class User(Base):
         passive_deletes=True,
     )
 
+    @override
     def __repr__(self) -> str:
         return f"<User id={self.id} username='{self.username}' email='{self.email}'>"
