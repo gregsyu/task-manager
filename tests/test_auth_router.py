@@ -1,12 +1,14 @@
+from fastapi.testclient import TestClient
 import pytest
 from .conftest import create_user
 from src.main import app
 from src.dependencies import get_current_user
 from src.schemas.auth import UserCreate
+from sqlalchemy.orm import Session
 
 
 @pytest.fixture(scope="function")
-def auth_client(client, db_session):
+def auth_client(client: TestClient, db_session: Session):
     db_user = create_user(db_session)
 
     app.dependency_overrides[get_current_user] = lambda: db_user
@@ -14,7 +16,7 @@ def auth_client(client, db_session):
     app.dependency_overrides.pop(get_current_user, None)
 
 
-def test_register_user_success(client, db_session):
+def test_register_user_success(client: TestClient, db_session: Session):
     user_data = UserCreate(
         username="newuser",
         email="newuser@example.com",
@@ -32,7 +34,7 @@ def test_register_user_success(client, db_session):
     assert "id" in data
 
 
-def test_register_user_already_exists(client, db_session):
+def test_register_user_already_exists(client: TestClient, db_session: Session):
     # create existing user first
     create_user(db_session, username="existing", email="existing@example.com")
 
@@ -49,7 +51,7 @@ def test_register_user_already_exists(client, db_session):
     assert "already exists" in response.json()["detail"].lower()
 
 
-def test_login_success(client, db_session):
+def test_login_success(client: TestClient, db_session: Session):
     create_user(db_session, username="testuser")
 
     response = client.post(
@@ -64,7 +66,7 @@ def test_login_success(client, db_session):
     assert data["token_type"] == "bearer"
 
 
-def test_login_invalid_credentials(client, db_session):
+def test_login_invalid_credentials(client: TestClient, db_session: Session):
     create_user(db_session, username="testuser")
 
     response = client.post(
@@ -86,6 +88,6 @@ def test_read_users_me(auth_client):
     assert data["email"] == "testuser@example.com"
 
 
-def test_read_users_me_unauthorized(client):
+def test_read_users_me_unauthorized(client: TestClient):
     response = client.get("/auth/me")
     assert response.status_code == 401

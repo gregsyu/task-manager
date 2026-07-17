@@ -1,6 +1,7 @@
 from src.database import Base, Task, User
 from src.schemas.tasks import TaskStatus, TaskPriority
 from .conftest import create_user, create_user_and_task
+from sqlalchemy.orm import Session
 
 
 def test_database_models_import():
@@ -9,7 +10,7 @@ def test_database_models_import():
     assert User is not None
 
 
-def test_task_model_creation(db_session):
+def test_task_model_creation(db_session: Session):
     task = create_user_and_task(
         db_session,
         title="Test Task",
@@ -26,7 +27,7 @@ def test_task_model_creation(db_session):
     assert task.owner.username == "testuser"
 
 
-def test_user_model_creation(db_session):
+def test_user_model_creation(db_session: Session):
     user = create_user(
         db_session,
         username="testuser2",

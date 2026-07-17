@@ -94,7 +94,7 @@ def test_verify_access_token_missing_sub():
     token = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
     with pytest.raises(HTTPException) as info:
-        verify_access_token(token)
+        _ = verify_access_token(token)
 
     assert info.value.status_code == status.HTTP_401_UNAUTHORIZED
     assert "Could not validate credentials" in info.value.detail

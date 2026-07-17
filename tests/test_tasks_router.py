@@ -2,10 +2,11 @@ import pytest
 from .conftest import create_user
 from src.main import app
 from src.schemas.tasks import TaskCreate, TaskUpdate
+from sqlalchemy.orm import Session
 
 
 @pytest.fixture(scope="function")  # mocks JWT
-def auth_client(client, db_session):
+def auth_client(client, db_session: Session):
     from src.dependencies import get_current_user
 
     test_user = create_user(db_session)
@@ -14,7 +15,7 @@ def auth_client(client, db_session):
     app.dependency_overrides.pop(get_current_user, None)  # clean up override
 
 
-def test_create_task(auth_client, db_session):
+def test_create_task(auth_client, db_session: Session):
     task_data = TaskCreate(
         title="Test Task",
         description="This is a test task",
@@ -31,7 +32,7 @@ def test_create_task(auth_client, db_session):
     assert "id" in data
 
 
-def test_read_tasks(auth_client, db_session):
+def test_read_tasks(auth_client, db_session: Session):
     # create a task first
     task_data = TaskCreate(title="Test Task 2", description="Another test task")
     response = auth_client.post("/tasks/", json=task_data.model_dump())
@@ -46,7 +47,7 @@ def test_read_tasks(auth_client, db_session):
     assert data[0]["title"] == task_data.title
 
 
-def test_read_task_by_id(auth_client, db_session):
+def test_read_task_by_id(auth_client, db_session: Session):
     # create a task
     task_data = TaskCreate(title="Test Task 3", description="Task for reading by id")
     response = auth_client.post("/tasks/", json=task_data.model_dump())
@@ -61,7 +62,7 @@ def test_read_task_by_id(auth_client, db_session):
     assert data["title"] == task_data.title
 
 
-def test_update_task(auth_client, db_session):
+def test_update_task(auth_client, db_session: Session):
     # create a task
     task_data = TaskCreate(title="Test Task 4", description="Task to update")
     response = auth_client.post("/tasks/", json=task_data.model_dump())
@@ -79,7 +80,7 @@ def test_update_task(auth_client, db_session):
     assert data["status"] == update_data.status
 
 
-def test_delete_task(auth_client, db_session):
+def test_delete_task(auth_client, db_session: Session):
     # create a task
     task_data = TaskCreate(title="Test Task 5", description="Task to delete")
     response = auth_client.post("/tasks/", json=task_data.model_dump())

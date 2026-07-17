@@ -3,7 +3,7 @@ from src.main import app
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlmodel.pool import StaticPool
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from src.dependencies import get_db
 from src.database import Base, User
 from src.security import get_password_hash
@@ -19,8 +19,8 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 def override_get_db():
+    db = TestingSessionLocal()
     try:
-        db = TestingSessionLocal()
         yield db
     finally:
         db.close()
@@ -43,7 +43,7 @@ def client():
     return TestClient(app)
 
 
-def create_user(db_session, **kwargs):
+def create_user(db_session: Session, **kwargs: str):
     data = {
         "username": "testuser",
         "email": "testuser@example.com",
@@ -59,7 +59,7 @@ def create_user(db_session, **kwargs):
     return user
 
 
-def create_user_and_task(db_session, **kwargs):
+def create_user_and_task(db_session: Session, **kwargs: str):
     user = create_user(db_session)
     data = {
         "title": "Test Task",

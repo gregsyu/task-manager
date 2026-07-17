@@ -2,9 +2,10 @@ import pytest
 from .conftest import create_user_and_task
 from src.schemas.tasks import TaskUpdate
 from src.service import delete_task, get_task_by_id, update_task
+from sqlalchemy.orm import Session
 
 
-def test_get_task_by_existing_id(db_session):
+def test_get_task_by_existing_id(db_session: Session):
     task = create_user_and_task(db_session)
     db_session.refresh(task)
 
@@ -17,12 +18,12 @@ def test_get_task_by_existing_id(db_session):
     assert ftask.priority == task.priority
 
 
-def test_get_task_by_non_existing_id(db_session):
+def test_get_task_by_non_existing_id(db_session: Session):
     task = get_task_by_id(db=db_session, task_id=999)
     assert task is None
 
 
-def test_update_task(db_session):
+def test_update_task(db_session: Session):
     task = create_user_and_task(db_session)
     db_session.refresh(task)
 
@@ -36,7 +37,7 @@ def test_update_task(db_session):
     assert updated_task.priority == task.priority
 
 
-def test_update_task_invalid_status(db_session):
+def test_update_task_invalid_status(db_session: Session):
     task = create_user_and_task(db_session)
     db_session.refresh(task)
 
@@ -46,7 +47,7 @@ def test_update_task_invalid_status(db_session):
     assert exc_info.value is not None
 
 
-def test_update_task_invalid_priority(db_session):
+def test_update_task_invalid_priority(db_session: Session):
     task = create_user_and_task(db_session)
     db_session.refresh(task)
 
@@ -56,7 +57,7 @@ def test_update_task_invalid_priority(db_session):
     assert exc_info.value is not None
 
 
-def test_delete_task(db_session):
+def test_delete_task(db_session: Session):
     task = create_user_and_task(db_session)
     db_session.refresh(task)
 
