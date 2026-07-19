@@ -5,3 +5,7 @@ class HealthResponse(BaseModel):
     message: str
     version: str
     environment: str
+
+
+class ErrorResponse(BaseModel):
+    detail: str

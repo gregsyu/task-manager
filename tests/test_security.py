@@ -2,6 +2,7 @@ import pytest
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from src.settings import settings
+from typing import Dict
 
 from src.security import (
     get_password_hash,
@@ -30,11 +31,12 @@ def test_verify_password():
 
 
 def test_create_access_token():
-    data = {"sub": "1", "username": "testuser"}
+    data: Dict[str, str | datetime] = {"sub": "1", "username": "testuser"}
     token = create_access_token(data)
 
     assert isinstance(token, str)
     assert len(token) > 0
+    assert settings.SECRET_KEY
 
     try:
         payload = jwt.decode(
@@ -49,7 +51,7 @@ def test_create_access_token():
 
 
 def test_verify_access_token_valid():
-    data = {"sub": "1", "username": "testuser"}
+    data: Dict[str, str | datetime] = {"sub": "1", "username": "testuser"}
     token = create_access_token(data)
 
     payload = verify_access_token(token)
@@ -61,36 +63,40 @@ def test_verify_access_token_invalid():
     invalid_token = "invalid.token.string"
 
     with pytest.raises(HTTPException) as info:
-        verify_access_token(invalid_token)
+        _ = verify_access_token(invalid_token)
 
     assert info.value.status_code == status.HTTP_401_UNAUTHORIZED
     assert "Could not validate credentials" in info.value.detail
 
 
 def test_verify_access_token_expired():
-    data = {"sub": "1", "username": "testuser"}
+    data: Dict[str, str | datetime] = {"sub": "1", "username": "testuser"}
     # create token that expired 1 minute ago
     expire = datetime.now(timezone.utc) - timedelta(minutes=1)
     to_encode = data.copy()
     to_encode.update({"exp": expire})
+    assert settings.SECRET_KEY
+
     expired_token = jwt.encode(
         to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM
     )
 
     with pytest.raises(HTTPException) as info:
-        verify_access_token(expired_token)
+        _ = verify_access_token(expired_token)
 
     assert info.value.status_code == status.HTTP_401_UNAUTHORIZED
     assert "Could not validate credentials" in info.value.detail
 
 
 def test_verify_access_token_missing_sub():
-    data = {"username": "testuser"}  # no 'sub'
+    data: Dict[str, str | datetime] = {"username": "testuser"}  # no 'sub'
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
     )
     to_encode = data.copy()
     to_encode.update({"exp": expire})
+    assert settings.SECRET_KEY
+
     token = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
     with pytest.raises(HTTPException) as info:

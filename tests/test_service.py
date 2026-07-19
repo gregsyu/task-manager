@@ -1,6 +1,6 @@
 import pytest
 from .conftest import create_user_and_task
-from src.schemas.tasks import TaskUpdate
+from src.schemas.tasks import TaskUpdate, TaskStatus
 from src.service import delete_task, get_task_by_id, update_task
 from sqlalchemy.orm import Session
 
@@ -27,7 +27,7 @@ def test_update_task(db_session: Session):
     task = create_user_and_task(db_session)
     db_session.refresh(task)
 
-    update_data = TaskUpdate(title="Updated Task Title", status="done")
+    update_data = TaskUpdate(title="Updated Task Title", status=TaskStatus.DONE)
     updated_task = update_task(db=db_session, task=task, task_update=update_data)
 
     assert updated_task.title == update_data.title
@@ -42,8 +42,8 @@ def test_update_task_invalid_status(db_session: Session):
     db_session.refresh(task)
 
     with pytest.raises(Exception) as exc_info:
-        update_data = TaskUpdate(status="invalid_status")
-        update_task(db=db_session, task=task, task_update=update_data)
+        update_data = TaskUpdate(status="invalid_status")  # pyright: ignore[reportArgumentType]
+        _ = update_task(db=db_session, task=task, task_update=update_data)
     assert exc_info.value is not None
 
 
@@ -52,8 +52,8 @@ def test_update_task_invalid_priority(db_session: Session):
     db_session.refresh(task)
 
     with pytest.raises(Exception) as exc_info:
-        update_data = TaskUpdate(priority="invalid_priority")
-        update_task(db=db_session, task=task, task_update=update_data)
+        update_data = TaskUpdate(priority="invalid_priority")  # pyright: ignore[reportArgumentType]
+        _ = update_task(db=db_session, task=task, task_update=update_data)
     assert exc_info.value is not None
 
 

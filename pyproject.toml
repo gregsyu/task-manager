@@ -36,6 +36,7 @@ max-complexity = 10
 [tool.pyright]
 deprecateTypingAliases = false
 reportMissingTypeStubs = false
+reportAny = false
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

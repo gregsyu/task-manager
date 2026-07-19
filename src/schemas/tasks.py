@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Annotated, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 import enum
@@ -20,9 +20,9 @@ class TaskPriority(str, enum.Enum):
 
 class BaseTask(BaseModel):
     title: str = Field(..., min_length=1, max_length=200, description="Title task")
-    description: Optional[str] = Field(None, max_length=2000)
+    description: Annotated[str | None, Field(max_length=2000)] = None
     status: TaskStatus = Field(TaskStatus.PENDING)
-    priority: Optional[TaskPriority] = Field(TaskPriority.MEDIUM)
+    priority: Optional[TaskPriority] = TaskPriority.MEDIUM
     due_date: Optional[datetime] = None
 
 
@@ -32,10 +32,10 @@ class TaskCreate(BaseTask):
 
 class TaskUpdate(BaseModel):
     # All optional fields to partial update
-    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    title: Annotated[str | None, Field(min_length=1, max_length=200)] = None
     description: Optional[str] = None
-    status: Optional[TaskStatus] = Field(None)
-    priority: Optional[TaskPriority] = Field(None)
+    status: Optional[TaskStatus] = None
+    priority: Optional[TaskPriority] = None
     due_date: Optional[datetime] = None
 
 

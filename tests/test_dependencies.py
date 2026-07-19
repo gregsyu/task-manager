@@ -34,7 +34,7 @@ def test_get_current_user_invalid_token():
     with patch("src.dependencies.verify_access_token") as mock_verify:
         mock_verify.side_effect = JWTError("Invalid token")
         with pytest.raises(HTTPException) as info:
-            get_current_user(token="invalid_token", db=mock_db)
+            _ = get_current_user(token="invalid_token", db=mock_db)
 
         assert info.value.status_code == status.HTTP_401_UNAUTHORIZED
         assert "Could not validate credentials" in info.value.detail
@@ -47,7 +47,7 @@ def test_get_current_user_missing_sub():
         mock_verify.return_value = {"username": "testuser"}  # no 'sub'
 
         with pytest.raises(HTTPException) as info:
-            get_current_user(token="invalid_token", db=mock_db)
+            _ = get_current_user(token="invalid_token", db=mock_db)
 
         assert info.value.status_code == status.HTTP_401_UNAUTHORIZED
         assert "Could not validate credentials" in info.value.detail
@@ -61,7 +61,7 @@ def test_get_current_user_user_not_found():
         mock_db.query.return_value.filter.return_value.first.return_value = None
 
         with pytest.raises(HTTPException) as info:
-            get_current_user(token="valid_token", db=mock_db)
+            _ = get_current_user(token="valid_token", db=mock_db)
 
         assert info.value.status_code == status.HTTP_401_UNAUTHORIZED
         assert "Could not validate credentials" in info.value.detail
